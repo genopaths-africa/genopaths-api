@@ -1,0 +1,14 @@
+version: '3.7'
+
+services:
+  genopaths_api:
+    container_name: "genopaths_api"
+    build:
+      context: ./
+      dockerfile: Dockerfile
+#    command: gunicorn --bind 0.0.0.0:8181 wsgi:app
+    env_file:
+      - ./.env.prod
+    volumes:
+      - ./:/app
+    restart: always
