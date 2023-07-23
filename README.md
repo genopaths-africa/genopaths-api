@@ -16,7 +16,30 @@ flask init
 # Create a new migration 
 flask db migrate #autogenrate revision file 
 flask db revision -m "create some table"
-flask db upgrate #apply migrations
+flask db upgrade #apply migrations
 flask db downgrade # undo previous migration
 
 ```
+
+## Using docker in dev 
+
+```
+docker-compose -f docker-compose-dev.yml
+```
+
+## Access database 
+```
+docker-compose -f docker-compose-dev.yml exec genopaths_db psql -U genopaths -h localhost -d genopaths
+```
+
+## Running tests
+
+```
+python -m pytest -s
+```
+
+# Seeding data 
+
+```
+flask seed run
+``` 

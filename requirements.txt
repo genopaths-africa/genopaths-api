@@ -17,3 +17,5 @@ pika
 Flask-Script
 Flask-Migrate
 gunicorn
+pytest
+Flask-Seeder

@@ -1,18 +1,18 @@
 # Import flask and template operators
 from flask import Flask, render_template, request, send_from_directory, jsonify
 from flask.sessions import SecureCookieSessionInterface
-from genopaths.extensions import db, ma, login_manager, migrate
+from genopaths.extensions import db, ma, login_manager, migrate, seeder
 from flask_login import UserMixin
 from flask_cors import CORS
 import base64
-from flask_login import user_loaded_from_header, user_loaded_from_request
+from flask_login import user_loaded_from_request, user_loaded_from_request
 from flask import g
 from genopaths.modules.users.models import User
 
 # This prevents setting the Flask Session cookie whenever the user authenticated using your header_loader.
 # Reference: https://flask-login.readthedocs.io/en/latest/
-@user_loaded_from_header.connect    
-def user_loaded_from_header(self, user=None):
+@user_loaded_from_request.connect    
+def user_loaded_from_request(self, user=None):
     g.login_via_header = True
 
 
@@ -39,6 +39,7 @@ def create_app():
     db.init_app(app) #flask_sqlalchemy
     ma.init_app(app) #flask_marshmallow
     migrate.init_app(app, db)
+    seeder.init_app(app, db) #flask-seeder
     
     # Enable CORS -- Remove this if not useful
     CORS(app,  origins="*")
