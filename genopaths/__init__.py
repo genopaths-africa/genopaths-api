@@ -89,7 +89,7 @@ def add_cors(resp):
 
     resp.headers['Access-Control-Allow-Origin'] = request.headers.get('Origin','*')
     resp.headers['Access-Control-Allow-Credentials'] = 'true'
-    resp.headers['Access-Control-Allow-Methods'] = 'POST, OPTIONS, GET, PUT, DELETE'
+    resp.headers['Access-Control-Allow-Methods'] = 'POST, OPTIONS, GET, PUT, DELETE, PATCH'
     resp.headers['Access-Control-Allow-Headers'] = request.headers.get(
         'Access-Control-Request-Headers', 'Authorization' )
     # set low for debugging
@@ -116,11 +116,13 @@ def handle_options_header():
 from genopaths.modules.users.controllers import mod_users as mod_users
 from genopaths.modules.authentication.controllers import mod_auth as mod_auth
 from genopaths.modules.projects.controllers import mod_projects as mod_projects
+from genopaths.modules.parameters.controllers import mod_parameters as mod_parameters
 
 # Register blueprint(s)
 app.register_blueprint(mod_users)
 app.register_blueprint(mod_auth)
 app.register_blueprint(mod_projects)
+app.register_blueprint(mod_parameters)
 
 # TP error handling
 @app.errorhandler(404)

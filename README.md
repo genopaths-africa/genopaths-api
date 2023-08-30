@@ -3,7 +3,7 @@ GenoPaths API  - REST API Server for GenoPaths Platform
 
 ## Setup 
 1. Create virtualenv : python -m virtualenv venv && source venv/bin/activate
-2. Install dependencies: python -r requirements.txt
+2. Install dependencies: pip install -r requirements.txt
 
 ## Accessing migration commands 
 
@@ -25,6 +25,9 @@ flask db downgrade # undo previous migration
 
 ```
 docker-compose -f docker-compose-dev.yml
+
+#connect to postgresql
+docker-compose -f docker-compose-dev.yml exec genopaths_db psql -U genopaths  -h localhost -d genopaths
 ```
 
 ## Access database 
