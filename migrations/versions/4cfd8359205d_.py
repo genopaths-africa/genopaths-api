@@ -65,7 +65,5 @@ def upgrade():
 def downgrade():
     op.drop_constraint("unique_users", "users")
     op.drop_table('users')
-    op.execute("DROP TYPE roleenum")
-    op.execute("DROP TYPE techtypeenum")
-    op.execute("DROP TYPE networkentitytypeenum")
+    op.execute("DROP TYPE roletype")
 

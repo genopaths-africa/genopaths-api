@@ -1,0 +1,29 @@
+version: '3.7'
+
+services:
+  genopaths_api:
+    container_name: "genopaths_api"
+    build:
+      context: ./
+      dockerfile: Dockerfile
+#    command: gunicorn --bind 0.0.0.0:8181 wsgi:app
+    env_file:
+      - ./.env.dev
+    volumes:
+      - ./:/app
+    ports:
+      - '8181:8181'      
+  genopaths_db:
+    container_name: "genopaths_db"
+    image: postgres:13
+    volumes:
+      - bodaoms_db_data:/var/lib/postgresql/data
+    env_file:
+      - ./.env.dev
+    ports:
+      - '5432:5432'
+    env_file:
+      - ./.env.dev 
+
+volumes:
+  bodaoms_db_data:    

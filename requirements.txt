@@ -17,3 +17,6 @@ pika
 Flask-Script
 Flask-Migrate
 gunicorn
+pytest
+Flask-Seeder
+marshmallow_enum

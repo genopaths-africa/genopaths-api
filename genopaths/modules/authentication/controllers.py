@@ -24,10 +24,10 @@ def authenticate_user():
     if user is not None:
         ma_schema = UserSchema()
         user_data = ma_schema.dump(user)
-        user_data['id'] = user.pk
+        user_data['id'] = user.id
         user_data['token'] = user.token #base64.b64encode(bytes(user.token, 'utf-8')).decode("utf-8")
 
-        del user_data['pk']
+        del user_data['id']
 
         return jsonify({'status':'success', 'data':user_data})
     else:
@@ -41,7 +41,7 @@ def register_user():
     content = request.get_json()
     app.logger.info(content)
     #check password 
-    if content['password'] != content['password2']:
+    if content['password'] != content['confirm_password']:
         return jsonify({"status": 'error', "message": 'Passwords donot much.' })
 
     now = datetime.now()
@@ -61,7 +61,8 @@ def register_user():
                 is_account_non_locked= True, #content['is_account_non_locked'],
                 is_enabled=True, #content['is_enabled'],
                 token=token,
-                photo=content['photo'],)
+                photo=content['photo'] if 'photo' in content else None
+                )
 
     db.session.add(user)
     db.session.commit()

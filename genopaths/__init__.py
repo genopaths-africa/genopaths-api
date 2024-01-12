@@ -1,18 +1,18 @@
 # Import flask and template operators
 from flask import Flask, render_template, request, send_from_directory, jsonify
 from flask.sessions import SecureCookieSessionInterface
-from genopaths.extensions import db, ma, login_manager, migrate
+from genopaths.extensions import db, ma, login_manager, migrate, seeder
 from flask_login import UserMixin
 from flask_cors import CORS
 import base64
-from flask_login import user_loaded_from_header, user_loaded_from_request
+from flask_login import user_loaded_from_request, user_loaded_from_request
 from flask import g
 from genopaths.modules.users.models import User
 
 # This prevents setting the Flask Session cookie whenever the user authenticated using your header_loader.
 # Reference: https://flask-login.readthedocs.io/en/latest/
-@user_loaded_from_header.connect    
-def user_loaded_from_header(self, user=None):
+@user_loaded_from_request.connect    
+def user_loaded_from_request(self, user=None):
     g.login_via_header = True
 
 
@@ -39,6 +39,7 @@ def create_app():
     db.init_app(app) #flask_sqlalchemy
     ma.init_app(app) #flask_marshmallow
     migrate.init_app(app, db)
+    seeder.init_app(app, db) #flask-seeder
     
     # Enable CORS -- Remove this if not useful
     CORS(app,  origins="*")
@@ -88,7 +89,7 @@ def add_cors(resp):
 
     resp.headers['Access-Control-Allow-Origin'] = request.headers.get('Origin','*')
     resp.headers['Access-Control-Allow-Credentials'] = 'true'
-    resp.headers['Access-Control-Allow-Methods'] = 'POST, OPTIONS, GET, PUT, DELETE'
+    resp.headers['Access-Control-Allow-Methods'] = 'POST, OPTIONS, GET, PUT, DELETE, PATCH'
     resp.headers['Access-Control-Allow-Headers'] = request.headers.get(
         'Access-Control-Request-Headers', 'Authorization' )
     # set low for debugging
@@ -115,11 +116,13 @@ def handle_options_header():
 from genopaths.modules.users.controllers import mod_users as mod_users
 from genopaths.modules.authentication.controllers import mod_auth as mod_auth
 from genopaths.modules.projects.controllers import mod_projects as mod_projects
+from genopaths.modules.parameters.controllers import mod_parameters as mod_parameters
 
 # Register blueprint(s)
 app.register_blueprint(mod_users)
 app.register_blueprint(mod_auth)
 app.register_blueprint(mod_projects)
+app.register_blueprint(mod_parameters)
 
 # TP error handling
 @app.errorhandler(404)

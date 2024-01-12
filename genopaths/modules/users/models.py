@@ -49,10 +49,13 @@ class User(db.Model):
 
     def get_id(self):
         return str(self.email)
+    
+    def __str__(self):
+        return "First name=%s, username=%s, password=%s, token=%s" % (self.first_name, self.username, self.password, self.token)
 
 class UserSchema(ma.Schema):
     """Flask Marshmallow Schema for Vendor model"""
 
     class Meta:
         model = User
-        fields = ('id','username','first_name','last_name','other_names','job_title','phone_number','photo', 'token', 'role')
+        fields = ('username','first_name','last_name','other_names','job_title','phone_number','photo', 'token', 'role')
