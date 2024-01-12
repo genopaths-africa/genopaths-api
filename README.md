@@ -26,7 +26,7 @@ flask db downgrade # undo previous migration
 ```
 docker-compose -f docker-compose-dev.yml
 
-#connect to postgresql
+#dconnect to postgresql
 docker-compose -f docker-compose-dev.yml exec genopaths_db psql -U genopaths  -h localhost -d genopaths
 ```
 
